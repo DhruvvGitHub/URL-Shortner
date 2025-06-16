@@ -10,6 +10,7 @@ import { UrlState } from "@/Context";
 import { getClicksForUrls } from "@/db/apiClicks";
 import { getUrls } from "@/db/apiUrls";
 import LinkCard from "@/components/LinkCard";
+import CreateLink from "@/components/CreateLink";
 
 const Dashborad = () => {
   const [searchQuery, setSearchQuery] = useState("")
@@ -55,7 +56,7 @@ console.log(urls);
       </div>
       <div className="flex items-center justify-between">
         <h1>My Links</h1>
-        <Button>Create Link</Button>
+        <CreateLink />
       </div>
       <div className="relative">
         <Input onChange={(e) => setSearchQuery(e.target.value)} type="text" value={searchQuery} placeholder="Filter Links" />
