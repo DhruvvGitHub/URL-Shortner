@@ -13,14 +13,12 @@ export async function login({email, password}) {
 
 export default login
 
-
 export async function getCurrentUser() {
-    const {data:session , error} = supabase.auth.getSession()
-    if(!session.session) return null
+    const {data: {session}, error} = await supabase.auth.getSession()
+    if(!session) return null
     if(error) throw new Error(error.message)
-    return session.session?.user
+    return session.user
 }
-
 
 export async function signUp({name, email, password, profile_pic}) {
     const fileName = `dp-${name.split(" ").join("-")}-${Math.random()}`
@@ -34,7 +32,7 @@ export async function signUp({name, email, password, profile_pic}) {
         options: {
             data: {
                 name,
-                profile_pic:` ${supabaseUrl}/storage/v1/object/public/profile_pic/${fileName}`
+                profile_pic:`${supabaseUrl}/storage/v1/object/public/profile_pic/${fileName}`
             }
         }
     })
@@ -43,3 +41,10 @@ export async function signUp({name, email, password, profile_pic}) {
     
     return data
 }
+
+
+
+export async function logOut(){
+    const {error} = await supabase.auth.signOut()
+    if(error) throw new Error(error.message)
+    }

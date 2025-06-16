@@ -1,0 +1,70 @@
+import React from "react";
+import { Card } from "./ui/card";
+import { Link } from "react-router-dom";
+import { Copy, Delete, Download, Trash } from "lucide-react";
+import { Button } from "./ui/button";
+
+const LinkCard = ({ url, fetchUrls }) => {
+
+    const downloadImage = () => {
+        const imageUrl = url?.qr
+        const fileName = url?.title
+
+        const anchor = document.createElement("a")
+        anchor.href = imageUrl
+        anchor.download = fileName
+
+        document.body.appendChild(anchor)
+        anchor.click()
+        document.body.removeChild(anchor)
+    } 
+
+    const 
+
+  return (
+    <Card className="flex flex-col md:flex-row justify-between px-4">
+      <div className="flex gap-4">
+        <div>
+          <img className="h-28" src={url?.qr} alt="qr code" />
+        </div>
+        <Link to={`/link/${url.id}`} className="flex flex-col">
+          <span className="text-xl md:text-3xl font-semibold">{url.title}</span>
+          <span className="text-blue-400">
+            Trimmed URL: https://trimit.in/
+            {url?.custom_url ? url?.custom_url : url.short_url}
+          </span>
+          <span>{url.original_url}</span>
+          <span className="flex items-end flex-1">
+            {new Date(url?.created_at).toLocaleDateString()}
+          </span>
+        </Link>
+      </div>
+      <div className="flex md:flex-col items-center gap-6">
+        <div>
+          <Button
+            onClick={() =>
+              navigator.clipboard.writeText(
+                `http://trimit.in/${url?.short_url}`
+              )
+            }
+            variant="ghost"
+          >
+            <Copy />
+          </Button>
+        </div>
+        <div>
+          <Button onClick={downloadImage} variant="ghost">
+            <Download />
+          </Button>
+        </div>
+        <div>
+          <Button variant="ghost">
+            <Trash />
+          </Button>
+        </div>
+      </div>
+    </Card>
+  );
+};
+
+export default LinkCard;
