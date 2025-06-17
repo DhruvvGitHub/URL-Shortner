@@ -13,29 +13,44 @@ import LinkCard from "@/components/LinkCard";
 import CreateLink from "@/components/CreateLink";
 
 const Dashborad = () => {
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const {user} = UrlState()
-  const {loading, error, data:urls, fn:fnUrls} = useFetch(getUrls, user?.id)
-  const {loading:loadingClicks, data:clicks, fn:fnClicks} = useFetch(getClicksForUrls,urls?.map((url) => url.id))
+  const { user } = UrlState();
+  const {
+    loading,
+    error,
+    data: urls,
+    fn: fnUrls,
+  } = useFetch(getUrls, user?.id);
+  const {
+    loading: loadingClicks,
+    data: clicks,
+    fn: fnClicks,
+  } = useFetch(
+    getClicksForUrls,
+    urls?.map((url) => url.id)
+  );
 
   useEffect(() => {
-    fnUrls()
-  },[])
+    fnUrls();
+  }, []);
 
   useEffect(() => {
-    if(urls?.length) fnClicks()
-    fnUrls()
-  },[urls?.length])
+    if (urls?.length) fnClicks();
+    fnUrls();
+  }, [urls?.length]);
 
-  const filteredUrls = urls?.filter((url) => 
-  url.title.toLowerCase().includes(searchQuery.toLowerCase())
-)
-console.log(urls);
+  const filteredUrls = urls?.filter((url) =>
+    url.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  console.log(urls);
 
   return (
     <div className="flex flex-col gap-8">
-      <div>{loading || loadingClicks && <BarLoader width={"100%"} color="bg-[#A3E635]" />}</div>
+      <div>
+        {loading ||
+          (loadingClicks && <BarLoader width={"100%"} color="bg-[#A3E635]" />)}
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
           <CardHeader>
@@ -50,7 +65,7 @@ console.log(urls);
             <CardTitle>Total Clicks</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>{clicks?.length}</p>
+            <p>{clicks?.length || "-"}</p>
           </CardContent>
         </Card>
       </div>
@@ -58,13 +73,22 @@ console.log(urls);
         <h1>My Links</h1>
         <CreateLink />
       </div>
-      <div className="relative">
-        <Input onChange={(e) => setSearchQuery(e.target.value)} type="text" value={searchQuery} placeholder="Filter Links" />
-        <Filter size={20} className="absolute top-2 right-2" />
-      </div>
+      {urls?.length > 0 ? (
+        <div className="relative">
+          <Input
+            onChange={(e) => setSearchQuery(e.target.value)}
+            type="text"
+            value={searchQuery}
+            placeholder="Filter Links"
+          />
+          <Filter size={20} className="absolute top-2 right-2" />
+        </div>
+      ) : (
+        <div className="text-center text-gray-500">No URLs created yet.</div>
+      )}
       {error && <Error message={error?.message} />}
       {(filteredUrls || []).map((url, i) => {
-        return <LinkCard key={i} url={url} fetchUrls={fnUrls} />
+        return <LinkCard key={i} url={url} fetchUrls={fnUrls} />;
       })}
     </div>
   );

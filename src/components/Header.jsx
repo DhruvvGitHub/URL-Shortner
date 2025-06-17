@@ -26,13 +26,13 @@ const Header = () => {
 
   return (
     <div>
-      <div className="w-full flex items-center justify-between px-6 py-4 bg-red-400">
+      <div className="w-full flex items-center justify-between px-6 py-4 bg-[#A3E635]">
         <div>
-          <Link to="/">Trim-It</Link>
+          <Link to="/" className="text-3xl font-bold text-black">Trim-It</Link>
         </div>
         <div>
           {!user ? (
-            <Button onClick={() => navigate("/auth")}>Login</Button>
+            <Button className="bg-black hover:bg-black hover:text-[#A3E635] text-[#A3E635]" onClick={() => navigate("/auth")}>Login</Button>
           ) : (
             <DropdownMenu>
               <DropdownMenuTrigger>

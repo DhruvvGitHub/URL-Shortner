@@ -83,11 +83,16 @@ const CreateLink = () => {
         if (!res) setSearchParams({});
       }}
     >
-      <DialogTrigger>Create New Link</DialogTrigger>
-      <DialogContent>
+      <DialogTrigger asChild>
+  <Button>Create New Link</Button>
+</DialogTrigger>
+
+      <DialogContent >
         <DialogHeader>
-          <DialogTitle>Create New</DialogTitle>
-        </DialogHeader>
+  <DialogTitle>Create New</DialogTitle>
+  <DialogDescription>Enter details below to create a shortened link</DialogDescription>
+</DialogHeader>
+
         {formValues.longUrl && (
           <QRCode value={formValues.longUrl} size={200} ref={ref} />
         )}

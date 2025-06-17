@@ -17,6 +17,7 @@ import useFetch from '@/hooks/useFetch'
 import { signUp } from '@/db/apiAuth'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { UrlState } from '@/Context'
+import { Label } from '../ui/label'
 
 const SignUp = () => {
     const [errors, setErrors] = useState({})
@@ -92,24 +93,27 @@ const SignUp = () => {
             {apiError && <Error message={apiError} /> }
   </CardHeader>
   <CardContent>
-    <div className='flex flex-col gap-4'>
+    <form action="" autoComplete='off' onSubmit={(e) => {e.preventDefault(); hanldeSignUp()}}>
+        {error && <Error message={error.message}/>}
+            <div className='flex flex-col gap-4'>
         <div>
-            <Input onChange={handleInputChange} type="text" name="name" placeholder="Please enter your email" />
+            <Input onChange={handleInputChange} type="text" name="name" placeholder="Full Name" />
             {errors.name && <Error message={errors.name} /> }
         </div>
         <div>
-            <Input onChange={handleInputChange} type="email" name="email" placeholder="Please enter your email" />
+            <Input onChange={handleInputChange} type="email" name="email" placeholder="Email" />
             {errors.email && <Error message={errors.email} /> }
         </div>
         <div>
-            <Input onChange={handleInputChange} type="password" name="password" placeholder="Please enter password" />
+            <Input onChange={handleInputChange} type="password" name="password" placeholder="Password" />
             {errors.password && <Error message={errors.password} /> }
         </div>
         <div>
+            <Label className="my-2">Choose a profile pic</Label>
             <Input onChange={handleInputChange} type="file" name="profile_pic" accept="image/*" placeholder="Please enter password" />
-            {errors.password && <Error message={errors.password} /> }
         </div>
     </div>
+    </form>
   </CardContent>
   <CardFooter>
     <Button onClick={hanldeSignUp}>

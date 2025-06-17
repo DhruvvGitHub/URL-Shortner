@@ -20,8 +20,8 @@ const LandingPage = () => {
   }
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="">
+    <div className="flex flex-col items-center mt-20">
+      <div className="mb-6">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold">
           The Smart Way to Share URLs.
         </h2>
@@ -42,12 +42,13 @@ const LandingPage = () => {
           <Button className="bg-[#A3E635]">Shorten</Button>
         </form>
       </div>
-      <div>
-        <img
-          className="w-[50vw] h-[20vh]"
-          src="../assets/main_img.png"
-          alt="lll"
-        />
+      <div className="mt-8">
+<img
+  className="w-full h-auto"
+  src="/assets/main_img.png"
+  alt="URL Shortener illustration"
+/>
+
       </div>
       <div className="w-full">
         <Accordion type="multiple" collapsible className="w-full">

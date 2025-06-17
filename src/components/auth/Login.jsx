@@ -53,7 +53,7 @@ const Login = () => {
         }
     },[data, error])
 
-    const hanldeLogin = async () => {
+    const handleLogin = async () => {
         try {
             setApiError("") // Clear previous API errors
             const schema = Yup.object().shape({
@@ -81,30 +81,48 @@ const Login = () => {
 
   return (
     <div>
-        <Card>
+      <Card>
   <CardHeader>
     <CardTitle>Login</CardTitle>
     <CardDescription>to your account if you have one</CardDescription>
-            {apiError && <Error message={apiError} /> }
+    {apiError && <Error message={apiError} />}
   </CardHeader>
+
   <CardContent>
-    <div className='flex flex-col gap-4'>
+    <form autoComplete="off" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+        {error && <Error message={error.message}/>}
+      <div className="flex flex-col gap-4">
         <div>
-            <Input onChange={handleInputChange} type="email" name="email" placeholder="Please enter your email" />
-            {errors.email && <Error message={errors.email} /> }
+          <Input
+            onChange={handleInputChange}
+            type="email"
+            name="email"
+            placeholder="Enter your registered email"
+            autoComplete="off"
+          />
+          {errors.email && <Error message={errors.email} />}
         </div>
         <div>
-            <Input onChange={handleInputChange} type="password" name="password" placeholder="Please enter password" />
-            {errors.password && <Error message={errors.password} /> }
+          <Input
+            onChange={handleInputChange}
+            type="password"
+            name="password"
+            placeholder="Please enter password"
+            autoComplete="off"
+          />
+          {errors.password && <Error message={errors.password} />}
         </div>
-    </div>
+      </div>
+
+      <CardFooter className="p-0 pt-4">
+        <Button type="submit">
+          {loading ? <ClipLoader size={22} /> : "Login"}
+        </Button>
+      </CardFooter>
+    </form>
   </CardContent>
-  <CardFooter>
-    <Button onClick={hanldeLogin}>
-        {loading ? <ClipLoader size={22} />: "Login"}
-    </Button>
-  </CardFooter>
 </Card>
+
     </div>
   )
 }

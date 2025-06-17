@@ -23,7 +23,7 @@ const getClicksForUrlsWrapper = (options, urlIds) => {
 
 const Link = () => {
   const [showError, setShowError] = useState(false);
-  
+
   const downloadImage = () => {
     const imageUrl = url?.qr;
     const fileName = url?.title;
@@ -43,14 +43,9 @@ const Link = () => {
     document.body.removeChild(anchor);
   };
   const navigate = useNavigate();
-  const {user, loading: userLoading} = UrlState();
-  const {id} = useParams();
-  const {
-    loading,
-    data: url,
-    fn,
-    error,
-  } = useFetch(getUrlWrapper);
+  const { user, loading: userLoading } = UrlState();
+  const { id } = useParams();
+  const { loading, data: url, fn, error } = useFetch(getUrlWrapper);
 
   const {
     loading: loadingStats,
@@ -58,10 +53,19 @@ const Link = () => {
     fn: fnStats,
   } = useFetch(getClicksForUrlsWrapper);
 
-  const {loading: loadingDelete, fn: fnDelete} = useFetch(deleteUrl);
+  const { loading: loadingDelete, fn: fnDelete } = useFetch(deleteUrl);
 
   useEffect(() => {
-    console.log("Link component - user:", user, "userLoading:", userLoading, "id:", id, "id type:", typeof id);
+    console.log(
+      "Link component - user:",
+      user,
+      "userLoading:",
+      userLoading,
+      "id:",
+      id,
+      "id type:",
+      typeof id
+    );
     if (user?.id && id && !userLoading) {
       console.log("Making API call with:", id, user.id);
       // Ensure id is a valid number
@@ -76,7 +80,14 @@ const Link = () => {
   }, [user?.id, id, userLoading]);
 
   useEffect(() => {
-    console.log("Stats effect - error:", error, "loading:", loading, "url:", url);
+    console.log(
+      "Stats effect - error:",
+      error,
+      "loading:",
+      loading,
+      "url:",
+      url
+    );
     if (!error && loading === false && url) {
       console.log("Fetching stats for URL:", url.id);
       fnStats([url.id]);
@@ -85,7 +96,14 @@ const Link = () => {
 
   // Handle error more gracefully
   useEffect(() => {
-    console.log("Error effect - error:", error, "loading:", loading, "userLoading:", userLoading);
+    console.log(
+      "Error effect - error:",
+      error,
+      "loading:",
+      loading,
+      "userLoading:",
+      userLoading
+    );
     if (error && !loading && !userLoading) {
       console.log("Error occurred:", error);
       setShowError(true);
@@ -122,10 +140,11 @@ const Link = () => {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4">
         <h2 className="text-2xl font-bold text-red-600">Link Not Found</h2>
-        <p className="text-gray-600">The link you're looking for doesn't exist or you don't have permission to view it.</p>
-        <Button onClick={() => navigate("/dashboard")}>
-          Go to Dashboard
-        </Button>
+        <p className="text-gray-600">
+          The link you're looking for doesn't exist or you don't have permission
+          to view it.
+        </p>
+        <Button onClick={() => navigate("/dashboard")}>Go to Dashboard</Button>
       </div>
     );
   }
@@ -140,9 +159,9 @@ const Link = () => {
       {(loading || loadingStats) && (
         <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />
       )}
-      <div className="flex flex-col gap-8 sm:flex-row justify-between">
-        <div className="flex flex-col items-start gap-8 rounded-lg sm:w-2/5">
-          <span className="text-6xl font-extrabold hover:underline cursor-pointer">
+      <div className="flex flex-col gap-8 sm:flex-row justify-between mt-6">
+        <div className="flex flex-col items-start gap-8 rounded-lg sm:w-2/4">
+          <span className="text-4xl md:text-6xl font-bold">
             {url?.title}
           </span>
           <a
@@ -161,7 +180,7 @@ const Link = () => {
             {url?.original_url}
           </a>
           <span className="flex items-end font-extralight text-sm">
-            {new Date(url?.created_at).toLocaleString()}
+            Created At: {new Date(url?.created_at).toLocaleString()}
           </span>
           <div className="flex gap-2">
             <Button
@@ -193,14 +212,14 @@ const Link = () => {
           </div>
           <img
             src={url?.qr}
-            className="w-full self-center sm:self-start ring ring-blue-500 p-1 object-contain"
+            className="w-1/2 sm:w-4/5 md:w-1/2 self-center sm:self-start ring ring-blue-500 p-1 object-contain"
             alt="qr code"
           />
         </div>
 
-        <Card className="sm:w-3/5">
+        <Card className="sm:w-2/4">
           <CardHeader>
-            <CardTitle className="text-4xl font-extrabold">Stats</CardTitle>
+            <CardTitle className="text-4xl font-bold">Stats</CardTitle>
           </CardHeader>
           {stats && stats.length ? (
             <CardContent className="flex flex-col gap-6">
