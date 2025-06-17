@@ -1,5 +1,4 @@
 import supabase from "./supabase";
-import supabaseUrl from "./supabase";
 
 export async function getUrls(user_id) {
   const { data, error } = await supabase
@@ -32,12 +31,18 @@ export async function createUrl(
 ) {
   const short_url = Math.random().toString(36).substring(2, 6);
   const fileName = `qr-${short_url}`;
+  
   const { error: storageError } = await supabase.storage
     .from("qrs")
     .upload(fileName, qrcode);
 
-  if (storageError) throw new Error(storageError.message);
+  if (storageError) {
+    console.error("Storage upload error:", storageError);
+    throw new Error(storageError.message);
+  }
 
+  // Use the environment variable directly for the Supabase URL
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const qr = `${supabaseUrl}/storage/v1/object/public/qrs/${fileName}`;
 
   const { data, error } = await supabase

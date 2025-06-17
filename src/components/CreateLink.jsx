@@ -1,5 +1,5 @@
 import { UrlState } from "@/Context";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Dialog,
@@ -18,11 +18,12 @@ import * as Yup from "yup";
 import useFetch from "@/hooks/useFetch";
 import { QRCode } from "react-qrcode-logo";
 import { createUrl } from "@/db/apiUrls";
+import { BeatLoader } from "react-spinners";
 
 const CreateLink = () => {
   const { user } = UrlState();
   const navigate = useNavigate();
-  const ref = useRef()
+  const ref = useRef();
   let [searchParams, setSearchParams] = useSearchParams();
   const longLink = searchParams.get("createNew");
 
@@ -30,7 +31,7 @@ const CreateLink = () => {
   const [formValues, setFormValues] = useState({
     title: "",
     longUrl: longLink ? longLink : "",
-    customurl: "",
+    customUrl: "",
   });
 
   const schema = Yup.object().shape({
@@ -47,60 +48,93 @@ const CreateLink = () => {
       [e.target.name]: e.target.value,
     });
   };
+  
+  const {
+    loading,
+    error,
+    data,
+    fn: fnCreateUrl,
+  } = useFetch(createUrl, { ...formValues, user_id: user.id, customUrl: formValues.customUrl || "" });
 
-  const {loading, error, data, fn:fnCreateUrl} = useFetch(createUrl, {...formValues, user_id:user.id})
-
-  const createNewLink = () => {
-    setErrors([])
-    try {
-        
-    } catch (error) {
-        console.log(error);
+  useEffect(() => {
+    if(error === null && data) {
+        navigate(`/link/${data[0].id}`)
     }
-  }
+  },[error, data])
+
+  const createNewLink = async () => {
+    setErrors([]);
+    try {
+        await schema.validate(formValues, {abortEarly: false})
+        const canvas = ref.current.canvasRef.current
+        const blob = await new Promise((resolve) => canvas.toBlob(resolve))
+
+        // Pass only the blob as the additional argument
+        await fnCreateUrl(blob)
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-      <Dialog defaultOpen={longLink} onOpenChange={(res) => {if(
-        !res) setSearchParams({})}} >
-        <DialogTrigger>Create New Link</DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Create New</DialogTitle>
-          </DialogHeader>
-          {formValues.longUrl && <QRCode value={formValues.longUrl} size={200} ref={ref} /> }
-          <div>
+    <Dialog
+      defaultOpen={longLink}
+      onOpenChange={(res) => {
+        if (!res) setSearchParams({});
+      }}
+    >
+      <DialogTrigger>Create New Link</DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Create New</DialogTitle>
+        </DialogHeader>
+        {formValues.longUrl && (
+          <QRCode value={formValues.longUrl} size={200} ref={ref} />
+        )}
+        <div>
+          <Input
+            onChange={handleChange}
+            name="title"
+            id="title"
+            value={formValues.title}
+            type="text"
+            placeholder="Short link title"
+          />
+          {errors.title && <Error message={errors.title} /> }
+        </div>
+        <div>
+          <Input
+            onChange={handleChange}
+            name="longUrl"
+            id="longUrl"
+            value={formValues.longUrl}
+            type="text"
+            placeholder="Enter your looong link"
+          />
+          {errors.longUrl && <Error message={errors.longUrl} /> }
+        </div>
+        <div>
+          <div className="flex items-center gap-2">
+            <Card className="p-2">trimit</Card>
+            <span>/</span>
             <Input
               onChange={handleChange}
-              id="title"
-              value={formValues.title}
+              name="customUrl"
+              id="customUrl"
+              value={formValues.customUrl}
               type="text"
-              placeholder="Short link title"
+              placeholder="Custom Link (Optional)"
             />
-            <Error message={"some error"} />
           </div>
-          <div>
-            <Input
-              onChange={handleChange}
-              id="longUrl"
-              value={formValues.longUrl}
-              type="text"
-              placeholder="Enter your looong link"
-            />
-            <Error message={"some error"} />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <Card className="p-2">trimit</Card>
-              <span>/</span>
-              <Input onChange={handleChange} id="customurl" value={formValues.customurl} type="text" placeholder="Custom Link (Optional)" />
-            </div>
-            <Error message={"some error"} />
-          </div>
-          <DialogFooter cla>
-            <Button className="sm:w-fit">Create</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        </div>
+          {error && <Error message={error.message} /> }
+        <DialogFooter>
+          <Button onClick={createNewLink} disabled={loading} className="sm:w-fit">
+            {loading ? <BeatLoader color="white" /> : "Create"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -24,11 +24,28 @@ const LinkCard = ({ url, fetchUrls }) => {
 
     const {loading:loadingDelete, fn:fnDelete} = useFetch(deleteUrl, url?.id)
 
+    // Debug: Log the URL data to see what's available
+    console.log("LinkCard URL data:", url);
+
   return (
     <Card className="flex flex-col md:flex-row justify-between px-4">
       <div className="flex gap-4">
         <div>
-          <img className="h-28" src={url?.qr} alt="qr code" />
+          {url?.qr ? (
+            <img 
+              className="h-28 object-contain" 
+              src={url?.qr} 
+              alt="qr code" 
+              onError={(e) => {
+                console.error("QR code failed to load:", url.qr);
+                e.target.style.display = 'none';
+              }}
+            />
+          ) : (
+            <div className="h-28 w-28 bg-gray-200 flex items-center justify-center text-gray-500 text-xs">
+              QR Code Not Available
+            </div>
+          )}
         </div>
         <Link to={`/link/${url.id}`} className="flex flex-col">
           <span className="text-xl md:text-3xl font-semibold">{url.title}</span>
