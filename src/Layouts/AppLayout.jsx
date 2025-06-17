@@ -12,7 +12,7 @@ const AppLayout = () => {
         </div>
       </main>
 
-      <div>Made with ❤️ by Dhruv</div>
+      <div className="px-8 my-6">Made with ❤️ by Dhruv</div>
       {/* Footer  */}
     </div>
   );
