@@ -24,8 +24,6 @@ const LinkCard = ({ url, fetchUrls }) => {
 
     const {loading:loadingDelete, fn:fnDelete} = useFetch(deleteUrl, url?.id)
 
-    // Debug: Log the URL data to see what's available
-    console.log("LinkCard URL data:", url);
 
   return (
     <Card className="flex flex-col md:flex-row justify-between px-4">
@@ -50,7 +48,7 @@ const LinkCard = ({ url, fetchUrls }) => {
         <Link to={`/link/${url.id}`} className="flex flex-col">
           <span className="text-xl md:text-3xl font-semibold">{url.title}</span>
           <span className="text-blue-400">
-            Trimmed URL: https://trimit.in/
+            Trimmed URL: https://trimrr.in/
             {url?.custom_url ? url?.custom_url : url.short_url}
           </span>
           <span>{url.original_url}</span>
@@ -64,7 +62,7 @@ const LinkCard = ({ url, fetchUrls }) => {
           <Button
             onClick={() =>
               navigator.clipboard.writeText(
-                `http://trimit.in/${url?.short_url}`
+                `https://trimrr.in/${url?.custom_url ? url?.custom_url : url.short_url}`
               )
             }
             variant="ghost"
