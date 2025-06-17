@@ -16,6 +16,11 @@ const getUrlWrapper = (options, id, user_id) => {
   return getUrl(id, user_id);
 };
 
+// Wrapper function for getClicksForUrls
+const getClicksForUrlsWrapper = (options, urlIds) => {
+  return getClicksForUrls(urlIds);
+};
+
 const Link = () => {
   const [showError, setShowError] = useState(false);
   
@@ -51,7 +56,7 @@ const Link = () => {
     loading: loadingStats,
     data: stats,
     fn: fnStats,
-  } = useFetch(getClicksForUrls);
+  } = useFetch(getClicksForUrlsWrapper);
 
   const {loading: loadingDelete, fn: fnDelete} = useFetch(deleteUrl);
 
@@ -74,7 +79,7 @@ const Link = () => {
     console.log("Stats effect - error:", error, "loading:", loading, "url:", url);
     if (!error && loading === false && url) {
       console.log("Fetching stats for URL:", url.id);
-      fnStats(url.id);
+      fnStats([url.id]);
     }
   }, [error, loading, url]);
 
@@ -87,6 +92,21 @@ const Link = () => {
       // Don't redirect immediately, let user see the error
     }
   }, [error, loading, userLoading]);
+
+  // Debug URL data
+  useEffect(() => {
+    console.log("URL data:", url);
+  }, [url]);
+
+  // Debug error state
+  useEffect(() => {
+    console.log("Error state:", error);
+  }, [error]);
+
+  // Debug stats data
+  useEffect(() => {
+    console.log("Stats data:", stats);
+  }, [stats]);
 
   // Don't render anything while user is loading
   if (userLoading) {
@@ -194,9 +214,9 @@ const Link = () => {
               </Card>
 
               <CardTitle>Location Data</CardTitle>
-
+              <LocationStats stats={stats} />
               <CardTitle>Device Info</CardTitle>
-
+              <DeviceStats stats={stats} />
             </CardContent>
           ) : (
             <CardContent>
