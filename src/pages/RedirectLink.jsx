@@ -11,24 +11,17 @@ const RedirectLink = () => {
   const {loading, data, fn} = useFetch(getLongUrl, id);
 
   useEffect(() => {
-    console.log("RedirectLink: Fetching URL for ID:", id);
     fn();
   }, []);
 
   useEffect(() => {
     if (!loading && data && data.original_url) {
-      console.log("RedirectLink: Found URL data:", data);
-      console.log("RedirectLink: Redirecting to:", data.original_url);
       // Call storeClicks directly since it handles the redirect
       storeClicks({
         id: data.id,
         originalUrl: data.original_url,
       });
-    } else if (!loading && data) {
-      console.log("RedirectLink: Data found but no original_url:", data);
-    } else if (!loading && !data) {
-      console.log("RedirectLink: No data found for ID:", id);
-    }
+    } 
   }, [loading, data]);
 
   // Show loading while fetching data

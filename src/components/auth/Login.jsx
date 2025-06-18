@@ -47,10 +47,6 @@ const Login = () => {
             navigate(`/dashboard?${longLink ? `createNew=${longLink}` : ""}`)
             fetchUser()
         }
-        if (data) {
-            // Handle successful login here
-            console.log("Login successful:", data)
-        }
     },[data, error])
 
     const handleLogin = async () => {

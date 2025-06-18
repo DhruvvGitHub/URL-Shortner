@@ -22,23 +22,11 @@ const Header = () => {
   const { loading, fn: fnLogOut } = useFetch(logOut);
 
   const { user, fetchUser } = UrlState();
-  console.log("User data:", user);
-  console.log("Profile pic URL:", user?.user_metadata?.profile_pic);
 
   // Test if profile picture URL is accessible
   useEffect(() => {
     if (user?.user_metadata?.profile_pic) {
       fetch(user.user_metadata.profile_pic)
-        .then(response => {
-          if (response.ok) {
-            console.log("Profile picture URL is accessible");
-          } else {
-            console.error("Profile picture URL returned status:", response.status);
-          }
-        })
-        .catch(error => {
-          console.error("Error testing profile picture URL:", error);
-        });
     }
   }, [user?.user_metadata?.profile_pic]);
 
@@ -59,10 +47,6 @@ const Header = () => {
                     src={user?.user_metadata?.profile_pic} 
                     onError={(e) => {
                       console.error("Failed to load profile image:", e);
-                      console.log("Attempted URL:", user?.user_metadata?.profile_pic);
-                    }}
-                    onLoad={() => {
-                      console.log("Profile image loaded successfully");
                     }}
                   />
                   <AvatarFallback>

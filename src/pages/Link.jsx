@@ -57,18 +57,7 @@ const Link = () => {
   const { loading: loadingDelete, fn: fnDelete } = useFetch(deleteUrl);
 
   useEffect(() => {
-    console.log(
-      "Link component - user:",
-      user,
-      "userLoading:",
-      userLoading,
-      "id:",
-      id,
-      "id type:",
-      typeof id
-    );
     if (user?.id && id && !userLoading) {
-      console.log("Making API call with:", id, user.id);
       // Ensure id is a valid number
       const numericId = parseInt(id, 10);
       if (isNaN(numericId)) {
@@ -81,30 +70,13 @@ const Link = () => {
   }, [user?.id, id, userLoading]);
 
   useEffect(() => {
-    console.log(
-      "Stats effect - error:",
-      error,
-      "loading:",
-      loading,
-      "url:",
-      url
-    );
     if (!error && loading === false && url) {
-      console.log("Fetching stats for URL:", url.id);
       fnStats([url.id]);
     }
   }, [error, loading, url]);
 
   // Handle error more gracefully
   useEffect(() => {
-    console.log(
-      "Error effect - error:",
-      error,
-      "loading:",
-      loading,
-      "userLoading:",
-      userLoading
-    );
     if (error && !loading && !userLoading) {
       console.log("Error occurred:", error);
       setShowError(true);
@@ -114,18 +86,8 @@ const Link = () => {
 
   // Debug URL data
   useEffect(() => {
-    console.log("URL data:", url);
   }, [url]);
 
-  // Debug error state
-  useEffect(() => {
-    console.log("Error state:", error);
-  }, [error]);
-
-  // Debug stats data
-  useEffect(() => {
-    console.log("Stats data:", stats);
-  }, [stats]);
 
   // Don't render anything while user is loading
   if (userLoading) {

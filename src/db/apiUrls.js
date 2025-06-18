@@ -32,7 +32,7 @@ export async function createUrl(
 ) {
   const short_url = Math.random().toString(36).substring(2, 6);
   const fileName = `qr-${short_url}`;
-  
+
   const { error: storageError } = await supabase.storage
     .from("qrs")
     .upload(fileName, qrcode);
@@ -58,16 +58,15 @@ export async function createUrl(
         qr,
       },
     ])
-    .select()
+    .select();
 
   if (error) {
     console.error(error.message);
     throw new Error("Error creating short URL");
   }
-  
+
   return data;
 }
-
 
 export async function getLongUrl(id) {
   const { data, error } = await supabase
@@ -84,17 +83,7 @@ export async function getLongUrl(id) {
   return data;
 }
 
-
 export async function getUrl(id, user_id) {
-  console.log("getUrl called with:", { 
-    id, 
-    user_id, 
-    idType: typeof id, 
-    user_idType: typeof user_id,
-    idValue: JSON.stringify(id),
-    user_idValue: JSON.stringify(user_id)
-  });
-  
   const { data, error } = await supabase
     .from("urls")
     .select("*")
@@ -107,6 +96,5 @@ export async function getUrl(id, user_id) {
     throw new Error("Short URL not found");
   }
 
-  console.log("getUrl result:", data);
   return data;
 }

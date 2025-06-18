@@ -43,7 +43,6 @@ const Dashborad = () => {
   const filteredUrls = urls?.filter((url) =>
     url.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  console.log(urls);
 
   return (
     <div className="flex flex-col gap-8">

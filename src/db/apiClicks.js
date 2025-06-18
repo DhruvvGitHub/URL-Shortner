@@ -2,7 +2,6 @@ import { UAParser } from "ua-parser-js";
 import supabase from "./supabase";
 
 export async function getClicksForUrls(urlIds) {
-  console.log("getClicksForUrls called with:", urlIds);
   
   const { data, error } = await supabase
     .from("clicks")
@@ -14,7 +13,6 @@ export async function getClicksForUrls(urlIds) {
     throw new Error("Unable to load clicks");
   }
 
-  console.log("getClicksForUrls result:", data);
   return data;
 }
 

@@ -50,10 +50,6 @@ const SignUp = () => {
             navigate(`/dashboard?${longLink ? `createNew=${longLink}` : ""}`)
             fetchUser()
         }
-        if (data) {
-            // Handle successful login here
-            console.log("SignUp successful:", data)
-        }
     },[data, error])
 
     const hanldeSignUp = async () => {
