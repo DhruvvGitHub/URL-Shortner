@@ -1,5 +1,4 @@
-import supabase from "./supabase"
-import supabaseUrl from "./supabase"
+import supabase, { supabaseUrl } from "./supabase"
 
 export async function login({email, password}) {
     const {data, error} = await supabase.auth.signInWithPassword({
@@ -32,7 +31,7 @@ export async function signUp({name, email, password, profile_pic}) {
         options: {
             data: {
                 name,
-                profile_pic:`${supabaseUrl}/storage/v1/object/public/profile_pic/${fileName}`
+                profile_pic:`${supabaseUrl}/storage/v1/object/public/profile-pic/${fileName}`
             }
         }
     })
@@ -41,8 +40,6 @@ export async function signUp({name, email, password, profile_pic}) {
     
     return data
 }
-
-
 
 export async function logOut(){
     const {error} = await supabase.auth.signOut()
