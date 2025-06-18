@@ -5,6 +5,7 @@ import { Copy, Delete, Download, Trash } from "lucide-react";
 import { Button } from "./ui/button";
 import useFetch from "@/hooks/useFetch";
 import { deleteUrl } from "@/db/apiUrls";
+import { getShortUrl } from "@/lib/utils";
 import { BeatLoader } from "react-spinners";
 
 const LinkCard = ({ url, fetchUrls }) => {
@@ -48,8 +49,7 @@ const LinkCard = ({ url, fetchUrls }) => {
         <Link to={`/link/${url.id}`} className="flex flex-col">
           <span className="text-xl md:text-3xl font-semibold">{url.title}</span>
           <span className="text-blue-400">
-            Trimmed URL: https://trimrr.in/
-            {url?.custom_url ? url?.custom_url : url.short_url}
+            Trimmed URL: {getShortUrl(url?.custom_url ? url?.custom_url : url.short_url)}
           </span>
           <span>{url.original_url}</span>
           <span className="flex items-end flex-1">
@@ -62,7 +62,7 @@ const LinkCard = ({ url, fetchUrls }) => {
           <Button
             onClick={() =>
               navigator.clipboard.writeText(
-                `https://trimrr.in/${url?.custom_url ? url?.custom_url : url.short_url}`
+                getShortUrl(url?.custom_url ? url?.custom_url : url.short_url)
               )
             }
             variant="ghost"

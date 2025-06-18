@@ -120,7 +120,7 @@ const CreateLink = () => {
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <Card className="p-2">trimit</Card>
+            <Card className="p-2">{window.location.hostname}</Card>
             <span>/</span>
             <Input
               onChange={handleChange}

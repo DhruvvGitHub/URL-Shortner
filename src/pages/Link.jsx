@@ -6,6 +6,7 @@ import { UrlState } from "@/Context";
 import { getClicksForUrls } from "@/db/apiClicks";
 import { deleteUrl, getUrl } from "@/db/apiUrls";
 import useFetch from "@/hooks/useFetch";
+import { getShortUrl } from "@/lib/utils";
 import { Copy, Download, LinkIcon, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -165,11 +166,11 @@ const Link = () => {
             {url?.title}
           </span>
           <a
-            href={`https://trimrr.in/${link}`}
+            href={getShortUrl(link)}
             target="_blank"
-            className="text-3xl sm:text-4xl text-blue-400 font-bold hover:underline cursor-pointer"
+            className="text-2xl sm:text-3xl text-blue-400 font-bold break-all hover:underline cursor-pointer"
           >
-            https://trimrr.in/{link}
+            {getShortUrl(link)}
           </a>
           <a
             href={url?.original_url}
@@ -186,7 +187,7 @@ const Link = () => {
             <Button
               variant="ghost"
               onClick={() =>
-                navigator.clipboard.writeText(`https://trimrr.in/${link}`)
+                navigator.clipboard.writeText(getShortUrl(link))
               }
             >
               <Copy />
